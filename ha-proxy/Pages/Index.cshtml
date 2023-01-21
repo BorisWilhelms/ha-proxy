@@ -1,4 +1,5 @@
-@page
+@page "{automation?}"
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @model ha_proxy.Pages.Index
 
 @{
@@ -9,11 +10,29 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
+    
+    <link rel="stylesheet" href="/styles/simple.min.css">
 </head>
 <body>
-<div>
-    Hello World!
-</div>
+<header>
+    <h1>@Model.Name</h1>    
+</header>
+<main>
+@if (!Model.Run)
+{
+    <form method="post">
+        <button type="submit" style="background: none" asp-page-handler="Run">
+            <img src="assets/run.svg" alt="Run"/>
+        </button>
+    </form>
+}
+else
+{
+    <img src="assets/done.svg" alt="Done"/>
+}    
+</main>
 </body>
 </html>

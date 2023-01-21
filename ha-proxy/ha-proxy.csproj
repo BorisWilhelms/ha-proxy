@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>ha_proxy</RootNamespace>
+        <UserSecretsId>4c41ed3d-e6a5-4973-9e87-42d6f1ea0e92</UserSecretsId>
     </PropertyGroup>
 
 </Project>
