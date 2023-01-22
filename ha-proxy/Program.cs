@@ -3,6 +3,12 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configurationPath = builder.Configuration["ConfigurationPath"];
+if (!String.IsNullOrWhiteSpace(configurationPath) && Directory.Exists(configurationPath))
+{
+    builder.Configuration.AddKeyPerFile(configurationPath);
+}
+    
 builder.Services.AddRazorPages();
 builder.Services.Configure<HomeAssistantOptions>(builder.Configuration.GetSection("HomeAssistant"));
 builder.Services.AddHttpClient<HomeAssistant>((provider, client) =>
