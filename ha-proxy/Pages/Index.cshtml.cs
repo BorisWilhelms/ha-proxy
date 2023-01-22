@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 
@@ -21,19 +22,17 @@ public class Index : PageModel
         _homeAssistant = homeAssistant;
         _automations = options.Value.Automations;
     }
-    
+
+    public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
+    {
+        if (string.IsNullOrWhiteSpace(Automation) || !_automations.Contains(Automation))
+        {
+            context.Result = BadRequest();
+        }
+    }
+
     public async Task<IActionResult> OnGet()
     {
-        if (string.IsNullOrWhiteSpace(Automation))
-        {
-            return BadRequest();
-        }
-
-        if (!_automations.Contains(Automation))
-        {
-            return BadRequest();
-        }
-
         var entity = await _homeAssistant.Get(Automation);
         Name = entity?.Attributes["friendly_name"]?.ToString();
 
@@ -42,16 +41,6 @@ public class Index : PageModel
 
     public async Task<IActionResult> OnPostRun()
     {
-        if (string.IsNullOrWhiteSpace(Automation))
-        {
-            return BadRequest();
-        }
-
-        if (!_automations.Contains(Automation))
-        {
-            return BadRequest();
-        }
-        
         var success = await _homeAssistant.Service("automation", "trigger", new{ entity_id = Automation });
         Run = true;
         return RedirectToPage();
